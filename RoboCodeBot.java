@@ -1,5 +1,8 @@
 package teste;
 import robocode.*;
+import robocode.AdvancedRobot;
+import robocode.HitRobotEvent;
+import robocode.ScannedRobotEvent;
 //import java.awt.Color;
 
 // API help : https://robocode.sourceforge.io/docs/robocode/robocode/Robot.html
@@ -7,7 +10,7 @@ import robocode.*;
 /**
  * RoboCodeBot - a robot by (your name here)
  */
-public class RoboCodeBot extends Robot
+public class RoboCodeBot extends AdvancedRobot
 {
 	/**
 	 * run: RoboCodeBot's default behavior
@@ -22,11 +25,9 @@ public class RoboCodeBot extends Robot
 
 		// Robot main loop
 		while(true) {
-			// Replace the next 4 lines with any behavior you would like
-			ahead(100);
-			turnGunRight(360);
-			back(100);
-			turnGunRight(360);
+			//samara - fica indo pra frente na velocidade maxima
+			ahead(10000);
+			setMaxVelocity(5);
 		}
 	}
 
@@ -50,7 +51,17 @@ public class RoboCodeBot extends Robot
 	 * onHitWall: What to do when you hit a wall
 	 */
 	public void onHitWall(HitWallEvent e) {
-		// Replace the next line with any behavior you would like
-		back(20);
+		//samara - vira em 90 graus
+		setTurnRight(5);
 	}	
+
+	//quando encosta em um robo 
+	public void onHitRobot(HitRobotEvent e) {
+		if (e.getBearing() > -10 && e.getBearing() < 10) {
+			fire(3);
+		}
+		if (e.isMyFault()) {
+			turnRight(10);
+		}
+	}
 }
