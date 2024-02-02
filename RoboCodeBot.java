@@ -10,8 +10,10 @@ import robocode.ScannedRobotEvent;
 /**
  * RoboCodeBot - a robot by (your name here)
  */
-public class RoboCodeBot extends AdvancedRobot
-{
+public class RoboCodeBot extends AdvancedRobot{
+
+	// Gire o robô para o meio do campo de batalha (hellen)
+        turnRadarRight(Double.POSITIVE_INFINITY);
 	/**
 	 * run: RoboCodeBot's default behavior
 	 */
@@ -28,6 +30,14 @@ public class RoboCodeBot extends AdvancedRobot
 			//samara - fica indo pra frente na velocidade maxima
 			ahead(10000);
 			setMaxVelocity(5);
+
+			// Execute a verificação de colisão (hellen)
+            		avoidCollision();
+
+			// Gire a arma e atire no meio do campo de batalha (hellen)
+            		turnGunRight(getHeading() - getGunHeading());
+            		fire(1); // Define a potência do tiro (de 0.1 a 3)
+            		execute(); // Executa o tiro
 		}
 	}
 
@@ -64,4 +74,24 @@ public class RoboCodeBot extends AdvancedRobot
 			turnRight(10);
 		}
 	}
+
+	// Override o método onScannedRobot() para reagir quando um robô for detectado (hellen)
+	    @Override
+	    public void onScannedRobot(ScannedRobotEvent event) {
+	        // Gire a arma em direção ao robô detectado
+	        turnGunRight(getHeading() - getGunHeading() + event.getBearing());
+	        // Atire no robô detectado
+	        fire(1);
+	    }
+
+	// Método para evitar colisões (hellen)
+	    private void avoidCollision() {
+	        // Verifique se estamos muito próximos de uma parede
+	        if (getX() < 50 || getX() > getBattleFieldWidth() - 50 ||
+	                getY() < 50 || getY() > getBattleFieldHeight() - 50) {
+	            // Se estivermos muito próximos, faça um giro aleatório para escapar
+	            setTurnRight(90);
+	            setAhead(100);
+	            execute(); // Executa o movimento
+	        }
 }
